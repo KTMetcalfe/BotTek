@@ -1,14 +1,13 @@
 {
     "RedTek": {
-        "complaints": [
-            "@complaint test",
-            "test",
-            "@complaintballs",
-            "balls"
-        ],
-        "legal_issues": [
-            "test"
-        ],
+        "complaints": [],
+        "legal_issues": [],
         "edit_count": 6
+    },
+    "redtek": {
+        "legal_issues": [],
+        "complaints": [],
+        "quotes": [],
+        "edit_count": 1
     }
 }
