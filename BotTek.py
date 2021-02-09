@@ -36,29 +36,7 @@ async def on_message(message):
 # Provides an automated response to anyone who starts their message with "@complaint",
 # also stores the complaint, minus "@complaint ", in the (filename_members) JSON file
     if message.content.startswith('@complaint'):
-        member = message.author.name
-        try:
-            with open(filename_members, "r") as data_file:
-                data_file.seek(0)
-                json_data = json.load(data_file)
-        except:
-            print(f'{filename_members} does not exist or is inproperly formatted')
-            data_string = f'{{"{member}": {{"complaints": []}}}}'
-            print(f'New JSON: {data_string}')
-            json_data = json.loads(data_string)
-
-    # Checks for existence of (member) and "complaints" directories in the
-    # (filename_members) JSON file before editing and writing to the file
-        if f'{member}' not in json_data:
-            json_data[f'{member}'] = {}
-            json_data[f'{member}']['complaints'] = []
-        elif 'complaints' not in json_data[f'{member}']:
-            json_data[f'{member}']['complaints'] = []
-
-        json_data[member]['complaints'].append(message.content.replace('@complaint ', ''))
-
-        with open(filename_members, 'w') as data_file:
-            json.dump(json_data, data_file, indent = 4)
+        complaint_json(message)
 
     # Waits before sending message for dramatic effect
         time.sleep(5)
@@ -67,29 +45,7 @@ async def on_message(message):
 # Provides an automated response to anyone who starts their message with "@complaint",
 # also stores the complaint, minus "@legal ", in the (filename_members) JSON file
     if message.content.startswith('@legal'):
-        member = message.author.name
-        try:
-            with open(filename_members, "r") as data_file:
-                data_file.seek(0)
-                json_data = json.load(data_file)
-        except:
-            print(f'{filename_members} does not exist or is inproperly formatted')
-            data_string = f'{{"{member}": {{"legal_issues": []}}}}'
-            print(f'New JSON: {data_string}')
-            json_data = json.loads(data_string)
-
-    # Checks for existence of (member) and "legal_issues" directories in the
-    # (filename_members) JSON file before editing and writing to the file
-        if f'{member}' not in json_data:
-            json_data[f'{member}'] = {}
-            json_data[f'{member}']['legal_issues'] = []
-        elif 'legal_issues' not in json_data[f'{member}']:
-            json_data[f'{member}']['legal_issues'] = []
-
-        json_data[member]['legal_issues'].append(message.content.replace('@legal ', ''))
-
-        with open(filename_members, 'w') as data_file:
-            json.dump(json_data, data_file, indent = 4)
+        legal_json(message);
 
     # Waits before sending message for dramatic effect
         time.sleep(5)
@@ -131,6 +87,60 @@ async def on_member_join(member):
     if guild.system_channel is not None:
         to_send = 'Welcome {0.mention} to {1.name}! I hope you enjoy your stay more than I do!'.format(member, guild)
         await guild.system_channel.send(to_send)
+
+# ----------------------------Helper Methods---------------------------------
+
+# Method for reading and writing complaints to the JSON file
+def complaint_json(message):
+    member = message.author.name
+    try:
+        with open(filename_members, "r") as data_file:
+            data_file.seek(0)
+            json_data = json.load(data_file)
+    except:
+        print(f'{filename_members} does not exist or is inproperly formatted')
+        data_string = f'{{"{member}": {{"complaints": []}}}}'
+        print(f'New JSON: {data_string}')
+        json_data = json.loads(data_string)
+
+# Checks for existence of (member) and "legal_issues" directories in the
+# (filename_members) JSON file before editing and writing to the file
+    if f'{member}' not in json_data:
+        json_data[f'{member}'] = {}
+        json_data[f'{member}']['complaints'] = []
+    elif 'complaints' not in json_data[f'{member}']:
+        json_data[f'{member}']['complaints'] = []
+
+    json_data[member]['complaints'].append(message.content.replace('@complaint ', ''))
+
+    with open(filename_members, 'w') as data_file:
+        json.dump(json_data, data_file, indent = 4)
+
+# Method for reading and writing legal issues to the JSON file
+def legal_json(message):
+    member = message.author.name
+    try:
+        with open(filename_members, "r") as data_file:
+            data_file.seek(0)
+            json_data = json.load(data_file)
+    except:
+        print(f'{filename_members} does not exist or is inproperly formatted')
+        data_string = f'{{"{member}": {{"legal_issues": []}}}}'
+        print(f'New JSON: {data_string}')
+        json_data = json.loads(data_string)
+
+# Checks for existence of (member) and "legal_issues" directories in the
+# (filename_members) JSON file before editing and writing to the file
+    if f'{member}' not in json_data:
+        json_data[f'{member}'] = {}
+        json_data[f'{member}']['legal_issues'] = []
+    elif 'legal_issues' not in json_data[f'{member}']:
+        json_data[f'{member}']['legal_issues'] = []
+
+    json_data[member]['legal_issues'].append(message.content.replace('@legal ', ''))
+
+    with open(filename_members, 'w') as data_file:
+        json.dump(json_data, data_file, indent = 4)
 
 with open(filename_token) as token:
     client.run(token.read())
